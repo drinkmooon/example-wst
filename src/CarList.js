@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-
-import Car from './Car';
-import "./seed"
+import React, { Component ,Link } from 'react';
+import { Table, Button} from 'antd';
+import "./seed";
+import 'antd/dist/antd.css';
 class CarList extends Component {
 
     state = {
@@ -13,7 +13,6 @@ class CarList extends Component {
     //处理投票事件
     //Processing when car is voted
     handleProductUpVote = (carId) => {
-
         //修改对应id的product的vote值
         //Modify the votes value of a car with a corresponding id.
         const nextCars = this.state.cars.map((car) => {
@@ -89,7 +88,26 @@ class CarList extends Component {
             this.sortBy(this.state.method);
         });
     }
-
+    getStar = (voteNum) => {
+        if (voteNum >= 50) {
+            return 5;
+        }
+        else if (voteNum >= 40) {
+            return 4;
+        }
+        else if (voteNum >= 30) {
+            return 3;
+        }
+        else if (voteNum >= 20) {
+            return 2;
+        }
+        else if (voteNum >= 10) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
     render() {
         //创建一个变量sorter来装排序的标签
         //a div contains the sort tags      
@@ -108,34 +126,44 @@ class CarList extends Component {
             </div>
         );
 
-        const mycars = this.state.cars;
-        const tableTitle = (
-            <tr>
-                <th>Brand</th>
-                <th>Style</th>
-                <th>Votes</th>
-                <th>Star</th>
-            </tr>
-        )
-        const carComponents = mycars.map((car) => (
-            <Car
-                key={'car-' + car.id}
-                id={car.id}
-                brand={car.brand}
-                style={car.style}
-                votes={car.votes}
-                onVote={this.handleProductUpVote}
-            />
-        ));
+        const {cars} = this.state;
+        const dataSource = cars.map((car) =>
+            (Object.assign({}, car, { star: this.getStar(car.votes), voteButton: 'Vote' })));
+        const columns = [
+            {
+                title: 'Brand',
+                dataIndex: 'brand',
+                key: 'brand',
 
+            },
+            {
+                title: 'Style',
+                dataIndex: 'style',
+                key: 'style',
+            },
+            {
+                title: 'Votes',
+                dataIndex: 'votes',
+                key: 'votes',
+            },
+            {
+                title: 'Star',
+                dataIndex: 'star',
+                key: 'star',
+            },
+            {
+                title: '',
+                dataIndex: 'voteButton',
+                key: 'voteButton',
+                render: (text, index) =>(
+                    <a onClick={() => this.handleProductUpVote(index.id)}>
+                        {text}
+                    </a>)
+            }
+        ]
         return (<div>
-            <div>
-                {sorter}
-                <table>
-                    {tableTitle}
-                    {carComponents}
-                </table>
-                </div>
+            {sorter}
+            <Table dataSource={dataSource} columns={columns}></Table>
         </div>);
     }
 };
