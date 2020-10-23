@@ -31,43 +31,13 @@ class Car extends Component {
         })();
 
         return (
-            <div >
-                <div >
-                    <img src={this.props.productImageUrl} />
-                </div>
-                <div >
-                    <div>
-                        <a onClick={this.handleUpVote}>
-                            <i />
-                        </a>
-                        {this.props.votes}
-                        <img src="images/star.png"></img>
-                        <span>{star}</span>
-                    </div>
-                    <div>
-                        <a href={this.props.url}>
-                            {this.props.title}
-                        </a>
-                        <p>
-                            {this.props.description}
-                        </p>
-                    </div>
-                    <div>
-                        <div>
-                            Brand:{this.props.brand}
-                        </div>
-                        <div >
-                            Style:{this.props.style}
-                        </div>
-                    </div>
-                    <div >
-                        <span>Submitted by:</span>
-                        <img
-                            src={this.props.submitterAvatarUrl}
-                        />
-                    </div>
-                </div>
-            </div>
+               <tr>
+                    <td>{this.props.brand}</td>
+                    <td>{this.props.style}</td>
+                    <td>{this.props.votes}</td>
+                    <td>{star}</td>
+                    <td><button onClick = {this.handleUpVote}>vote for</button></td>
+               </tr>         
         );
     }
 };

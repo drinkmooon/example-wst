@@ -48,6 +48,35 @@ class CarList extends Component {
         this.setState({ cars, method: "votes", upOrDown: "Down" })
     }
 
+    //根据key比较两个Product的大小关系
+    //Compare the size of two Products according to key.
+    compareBy = (key) => {
+        return (a, b) => {
+            //根据升序/降序状态值确定的正负系数
+            var upOrDown = this.state.upOrDown == "Down" ? -1 : 1;
+            //暂存比较的结果
+            var ans = 0;
+            if (a[key] < b[key]) {
+                ans = -1;
+            }
+            else if (a[key] > b[key]) {
+                ans = 1;
+            }
+            else {
+                ans = 0;
+            }
+            //用比较结果乘上一个+/-的系数满足升降序排序的要求
+            return upOrDown * ans;
+        };
+    }
+    //根据key对Products进行排序
+    //Sort Products by key
+    sortBy = (key) => {
+        let arrayCopy = [...this.state.cars];
+        arrayCopy.sort(this.compareBy(key));
+        this.setState({ cars: arrayCopy, method: key });
+    }
+
     //修改升序/降序
     //Modify ascending or descending order
     changeUpOrDown = () => {
@@ -68,7 +97,6 @@ class CarList extends Component {
             <div>
                 <div>SortBy:</div>
                 <div>
-                    <a onClick={() => { this.sortBy('title') }}>Title&ensp;</a>
                     <a onClick={() => { this.sortBy('votes') }}>Votes&ensp;</a>
                     <a onClick={() => { this.sortBy('id') }}>Id&ensp;</a>
                     <a onClick={() => { this.sortBy('brand') }}>Brand&ensp;</a>
@@ -81,25 +109,33 @@ class CarList extends Component {
         );
 
         const mycars = this.state.cars;
+        const tableTitle = (
+            <tr>
+                <th>Brand</th>
+                <th>Style</th>
+                <th>Votes</th>
+                <th>Star</th>
+            </tr>
+        )
         const carComponents = mycars.map((car) => (
             <Car
                 key={'car-' + car.id}
                 id={car.id}
-                title={car.title}
                 brand={car.brand}
                 style={car.style}
-                description={car.description}
-                url={car.url}
                 votes={car.votes}
-                submitterAvatarUrl={car.submitterAvatarUrl}
-                productImageUrl={car.productImageUrl}
                 onVote={this.handleProductUpVote}
             />
         ));
 
         return (<div>
-            {sorter}
-            {carComponents}
+            <div>
+                {sorter}
+                <table>
+                    {tableTitle}
+                    {carComponents}
+                </table>
+                </div>
         </div>);
     }
 };
