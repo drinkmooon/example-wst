@@ -93,18 +93,12 @@ class CarList extends Component {
     render() {
         //创建一个变量sorter来装排序的标签
         //a div contains the sort tags      
+        const sortKey = ['votes','id','brand','style'];
         const sorter = (
             <div>
                 <div>SortBy:</div>
-                <div>
-                    <a onClick={() => { this.sortBy('votes') }}>Votes&ensp;</a>
-                    <a onClick={() => { this.sortBy('id') }}>Id&ensp;</a>
-                    <a onClick={() => { this.sortBy('brand') }}>Brand&ensp;</a>
-                    <a onClick={() => { this.sortBy('style') }}>Style&ensp;</a>
-                </div>
-                <div>
-                    <a onClick={this.changeUpOrDown}>{this.state.upOrDown}</a>
-                </div>
+                {sortKey.map((item) => (<button onClick={() => { this.sortBy(item) }}>{item}&ensp;</button>))}
+                <div><button onClick={this.changeUpOrDown}>{this.state.upOrDown}</button></div>
             </div>
         );
 
