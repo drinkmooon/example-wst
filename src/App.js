@@ -1,10 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import { createHashHistory } from 'history';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {browserHistory} from 'react-router';
 import './App.css';
-import {Table} from 'antd';
-import 'antd/dist/antd.css';
-const App = () => (
-    <div className="App">
-    </div>
-  );
+import CarDetail from './CarDetail';
+import CarList from './CarList';
+class App extends React.Component {
+
+  a = ()=>{
+    browserHistory.push('/CarDetail');
+  }
+  render(){
+    
+    return (
+    <div>
+        <Router>
+            <Route path='/CarDetail' component={CarDetail}/>  
+            <Route path='/CarList' component={CarList}/>       
+        </Router>
+
+        </div>
+    )
+  }
+}
 export default App;
