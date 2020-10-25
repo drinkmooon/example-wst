@@ -1,7 +1,10 @@
-import React, { Component ,Link } from 'react';
+import React, { Component } from 'react';
 import { Table, Button} from 'antd';
-import "./seed";
+import "../data/seed";
 import 'antd/dist/antd.css';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import { createBrowserHistory } from "history";
+import CarDetail from './CarDetail';
 class CarList extends Component {
 
     state = {
@@ -150,14 +153,15 @@ class CarList extends Component {
                 dataIndex: 'voteButton',
                 key: 'voteButton',
                 render: (text, index) =>(
-                    <a onClick={() => this.handleProductUpVote(index.id)}>
+                    <Button onClick={() => this.handleProductUpVote(index.id)}>
                         {text}
-                    </a>)
+                    </Button>)
             }
         ]
         return (<div>
             {sorter}
             <Table dataSource={dataSource} columns={columns}></Table>
+            <Link to='/CarDetail' component = {CarDetail}>aaaaaaa</Link>
         </div>);
     }
 };
