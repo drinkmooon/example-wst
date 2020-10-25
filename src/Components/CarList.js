@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Table, Button} from 'antd';
-import "../data/seed";
+import { Link } from 'react-router-dom';
+import { Table, Button, PageHeader } from 'antd';
 import 'antd/dist/antd.css';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import { createBrowserHistory } from "history";
-import CarDetail from './CarDetail';
-class CarList extends Component {
 
+import "../data/seed";
+
+class CarList extends Component {
     state = {
         cars: [],
-        sortBy: "",
-        upOrDown: ""
+        sortedInfo: { order: 'descend', columnKey: 'votes' },
     };
 
     //处理投票事件
@@ -42,54 +40,7 @@ class CarList extends Component {
     //This function is called by the framework after the initialization of the component is complete.
     componentDidMount() {
         const cars = [...window.Seed.cars];
-        //初始时按照votes值使用降序排序
-        //sort in descending order by votes initially
-        cars.sort((a, b) => (
-            b.votes - a.votes
-        ));
-        this.setState({ cars, method: "votes", upOrDown: "Down" })
-    };
-
-    //根据key比较两个Product的大小关系
-    //Compare the size of two Products according to key.
-    compareBy = (key) => {
-        return (a, b) => {
-            //根据升序/降序状态值确定的正负系数
-            let upOrDown = this.state.upOrDown == "Down" ? -1 : 1;
-            //暂存比较的结果
-            let ans = 0;
-            if (a[key] < b[key]) {
-                ans = -1;
-            }
-            else if (a[key] > b[key]) {
-                ans = 1;
-            }
-            else {
-                ans = 0;
-            }
-            //用比较结果乘上一个+/-的系数满足升降序排序的要求
-            return upOrDown * ans;
-        };
-    };
-    //根据key对Products进行排序
-    //Sort Products by key
-    sortBy = (key) => {
-        let arrayCopy = [...this.state.cars];
-        arrayCopy.sort(this.compareBy(key));
-        this.setState({ cars: arrayCopy, method: key });
-    };
-
-    //修改升序/降序
-    //Modify ascending or descending order
-    changeUpOrDown = () => {
-        //根据旧的升降序状态推定新状态
-        //Inferring new values from old 'upOrDown'
-        let newUpDown = this.state.upOrDown === "Down" ? "Up" : "Down";
-        //在状态更新后通过回调函数的方式重新排序
-        //Call the 'sortBy' func when state update is complete
-        this.setState({ upOrDown: newUpDown }, () => {
-            this.sortBy(this.state.method);
-        });
+        this.setState({ cars: cars });
     };
 
     getStar = (voteNum) => {
@@ -112,20 +63,20 @@ class CarList extends Component {
             return 0;
         }
     };
-    
-    render() {
-        //创建一个变量sorter来装排序的标签
-        //a div contains the sort tags      
-        const sortKey = ['votes','id','brand','style'];
-        const sorter = (
-            <div>
-                <div>SortBy:</div>
-                {sortKey.map((item) => (<button onClick={() => { this.sortBy(item) }}>{item}&ensp;</button>))}
-                <div><button onClick={this.changeUpOrDown}>{this.state.upOrDown}</button></div>
-            </div>
-        );
 
-        const {cars} = this.state;
+    //antd.Table留下的接口,需要3个参数,用来更新sorter的键值和升/降序
+    //an interface that requires 3 parameters to update the sorter key and ascending/descending order.
+    handleChange = (pagination, filters, sorter) => {
+        this.setState({
+            sortedInfo: sorter,
+        });
+    };
+
+
+    render() {
+
+        let { sortedInfo, cars } = this.state;
+        sortedInfo = sortedInfo || {};
         const dataSource = cars.map((car) =>
             (Object.assign({}, car, { star: this.getStar(car.votes), voteButton: 'Vote' })));
         const columns = [
@@ -133,28 +84,28 @@ class CarList extends Component {
                 title: 'Brand',
                 dataIndex: 'brand',
                 key: 'brand',
-                render:(text,index) =>(
-                    <Link to={'/CarDetail/'+index.id}
+                render: (text, index) => (
+                    <Link to={'/CarDetail/' + index.id}
                         target='_blank'>{text}</Link>
                 ),
-                sorter:(a,b)=>a.votes-b.votes,
-                //sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
+                sorter: (a, b) => a.brand.length - b.brand.length,
+                sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
                 ellipsis: true,
             },
             {
                 title: 'Style',
                 dataIndex: 'style',
                 key: 'style',
-                sorter:(a,b)=>a.votes-b.votes,
-                //sortOrder: sortedInfo.columnKey === 'style' && sortedInfo.order,
+                sorter: (a, b) => a.style.length - b.style.length,
+                sortOrder: sortedInfo.columnKey === 'style' && sortedInfo.order,
                 ellipsis: true,
             },
             {
                 title: 'Votes',
                 dataIndex: 'votes',
                 key: 'votes',
-                sorter:(a,b)=>a.votes-b.votes,
-                //sortOrder: sortedInfo.columnKey === 'votes' && sortedInfo.order,
+                sorter: (a, b) => a.votes - b.votes,
+                sortOrder: sortedInfo.columnKey === 'votes' && sortedInfo.order,
                 ellipsis: true,
             },
             {
@@ -166,17 +117,20 @@ class CarList extends Component {
                 title: '',
                 dataIndex: 'voteButton',
                 key: 'voteButton',
-                render: (text, index) =>(
+                render: (text, index) => (
                     <Button onClick={() => this.handleProductUpVote(index.id)}>
                         {text}
-                    </Button>)
+                    </Button>),
             }
-        ]
+        ];
         return (<div>
-            {sorter}
-            <Table dataSource={dataSource} columns={columns}></Table>
+            <PageHeader title='Popular Cars'></PageHeader>
+            <Table dataSource={dataSource}
+                columns={columns}
+                onChange={this.handleChange}>
+            </Table>
         </div>);
-    }
+    };
 };
 
 export default CarList;

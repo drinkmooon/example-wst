@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import CarList from './Components/CarList';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-//ReactDOM.render(<CarList /> , document.getElementById('root'));
 
 ReactDOM.render(<App /> , document.getElementById('root'));
 

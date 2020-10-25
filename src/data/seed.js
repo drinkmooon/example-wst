@@ -6,15 +6,15 @@ window.Seed = (function () {
     const cars = [
       {
         id: 1,
-        brand:'丰田',
-        style:'卡罗拉',
+        brand:'FengTian',
+        style:'Kaluola',
         votes: generateVoteCount(),
         details:{
           fuelTankCapacity:"50L",
           fuelConsumption:"7.1L/100km",
           maximumSpeed:"180km/h",
           seetCapacity:5,
-        }
+        },
       },
       {
         id: 2,
@@ -26,7 +26,7 @@ window.Seed = (function () {
           fuelConsumption:"13.5L/100km",
           maximumSpeed:"161km/h",
           seetCapacity:9,
-        }
+        },
       },
       {
         id: 3,
@@ -38,7 +38,7 @@ window.Seed = (function () {
           fuelConsumption:"5.4L/100km",
           maximumSpeed:"193km/h",
           seetCapacity:5,
-        }
+        },
       },
       {
         id: 4,
@@ -50,7 +50,7 @@ window.Seed = (function () {
           fuelConsumption:"8.1L/100km",
           maximumSpeed:"240km/h",
           seetCapacity:4,
-        }
+        },
       },
     ];
   
