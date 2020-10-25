@@ -6,27 +6,51 @@ window.Seed = (function () {
     const cars = [
       {
         id: 1,
-        brand:'TOYOTA',
-        style:'ZRE120',
+        brand:'丰田',
+        style:'卡罗拉',
         votes: generateVoteCount(),
+        details:{
+          fuelTankCapacity:"50L",
+          fuelConsumption:"7.1L/100km",
+          maximumSpeed:"180km/h",
+          seetCapacity:5,
+        }
       },
       {
         id: 2,
         brand:'BENZ',
         style:'Sprinter',
         votes: generateVoteCount(),
+        details:{
+          fuelTankCapacity:"100L",
+          fuelConsumption:"13.5L/100km",
+          maximumSpeed:"161km/h",
+          seetCapacity:9,
+        }
       },
       {
         id: 3,
         brand:'Ford',
         style:'focus',
         votes: generateVoteCount(),
+        details:{
+          fuelTankCapacity:"53L",
+          fuelConsumption:"5.4L/100km",
+          maximumSpeed:"193km/h",
+          seetCapacity:5,
+        }
       },
       {
         id: 4,
         brand:'Chevrolet',
-        style:'VengaSoul',
+        style:'Camaro',
         votes: generateVoteCount(),
+        details:{
+          fuelTankCapacity:"72L",
+          fuelConsumption:"8.1L/100km",
+          maximumSpeed:"240km/h",
+          seetCapacity:4,
+        }
       },
     ];
   

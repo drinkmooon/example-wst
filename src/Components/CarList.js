@@ -41,7 +41,7 @@ class CarList extends Component {
     //组件初始化结束后框架会调用这个函数
     //This function is called by the framework after the initialization of the component is complete.
     componentDidMount() {
-        const cars = window.Seed.cars;
+        const cars = [...window.Seed.cars];
         //初始时按照votes值使用降序排序
         //sort in descending order by votes initially
         cars.sort((a, b) => (
@@ -112,6 +112,7 @@ class CarList extends Component {
             return 0;
         }
     };
+    
     render() {
         //创建一个变量sorter来装排序的标签
         //a div contains the sort tags      
@@ -132,16 +133,29 @@ class CarList extends Component {
                 title: 'Brand',
                 dataIndex: 'brand',
                 key: 'brand',
+                render:(text,index) =>(
+                    <Link to={'/CarDetail/'+index.id}
+                        target='_blank'>{text}</Link>
+                ),
+                sorter:(a,b)=>a.votes-b.votes,
+                //sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
+                ellipsis: true,
             },
             {
                 title: 'Style',
                 dataIndex: 'style',
                 key: 'style',
+                sorter:(a,b)=>a.votes-b.votes,
+                //sortOrder: sortedInfo.columnKey === 'style' && sortedInfo.order,
+                ellipsis: true,
             },
             {
                 title: 'Votes',
                 dataIndex: 'votes',
                 key: 'votes',
+                sorter:(a,b)=>a.votes-b.votes,
+                //sortOrder: sortedInfo.columnKey === 'votes' && sortedInfo.order,
+                ellipsis: true,
             },
             {
                 title: 'Star',
@@ -161,7 +175,6 @@ class CarList extends Component {
         return (<div>
             {sorter}
             <Table dataSource={dataSource} columns={columns}></Table>
-            <Link to='/CarDetail' component = {CarDetail}>aaaaaaa</Link>
         </div>);
     }
 };
