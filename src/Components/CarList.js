@@ -6,6 +6,7 @@ import 'antd/dist/antd.css';
 import "../data/seed";
 
 function CarList() {
+    //使用Hooks管理cars和sortedInfo
     const [cars, setCars] = useState([...window.Seed.cars]);
     const [sortedInfo, setSortedInfo] = useState({ order: 'descend', columnKey: 'votes' });
 
