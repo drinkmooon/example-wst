@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { Table, Button, PageHeader } from 'antd';
 import 'antd/dist/antd.css';
 
+import addStar from "../utils/addStar";
+import addButton from "../utils/addButton";
 import "../data/seed";
 
 function CarList() {
     //使用Hooks管理cars和sortedInfo
-    const [cars, setCars] = useState([...window.Seed.cars]);
+    const [cars, setCars] = useState(window.Seed.cars);
     const [sortedInfo, setSortedInfo] = useState({ order: 'descend', columnKey: 'votes' });
 
     //处理投票事件
@@ -29,35 +31,16 @@ function CarList() {
     };
 
 
-    let getStar = (voteNum) => {
-        if (voteNum >= 50) {
-            return 5;
-        }
-        else if (voteNum >= 40) {
-            return 4;
-        }
-        else if (voteNum >= 30) {
-            return 3;
-        }
-        else if (voteNum >= 20) {
-            return 2;
-        }
-        else if (voteNum >= 10) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
-    };
-
     //antd.Table留下的接口,需要3个参数,用来更新sorter的键值和升/降序
     //an interface that requires 3 parameters to update the sorter key and ascending/descending order.
     let handleChange = (pagination, filters, sorter) => {
         setSortedInfo(sorter);
     };
 
-    const dataSource = cars.map((car) =>
-        (Object.assign({}, car, { star: getStar(car.votes), voteButton: 'Vote' })));
+    //给Table展示的数据添加star列和Button列
+    let dataSource = addStar(cars);
+    dataSource = addButton(dataSource);
+
     const columns = [
         {
             title: 'Brand',
@@ -65,7 +48,8 @@ function CarList() {
             key: 'brand',
             render: (text, index) => (
                 <Link to={'/CarDetail/' + index.id}
-                    target='_blank'>{text}</Link>
+                    target='_blank'>{text}
+                </Link>
             ),
             sorter: (a, b) => a.brand.length - b.brand.length,
             sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
@@ -102,13 +86,14 @@ function CarList() {
                 </Button>),
         }
     ];
-    return (<div>
-        <PageHeader title='Popular Cars'></PageHeader>
-        <Table dataSource={dataSource}
-            columns={columns}
-            onChange={handleChange}>
-        </Table>
-    </div>);
+    return (
+        <div>
+            <PageHeader title='Popular Cars'></PageHeader>
+            <Table dataSource={dataSource}
+                columns={columns}
+                onChange={handleChange}>
+            </Table>
+        </div>);
 
 };
 
