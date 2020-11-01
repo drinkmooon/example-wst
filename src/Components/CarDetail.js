@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { Descriptions, PageHeader } from 'antd';
 import 'antd/dist/antd.css';
-
+// abort 
 function CarDetail() {
     //通过Hook获取Link.path中匹配到的参数
     let { id } = useParams();

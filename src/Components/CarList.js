@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Button, PageHeader } from 'antd';
+// import { Link } from 'react-router-dom';
+import { Table, Button, PageHeader, Rate, Modal, Descriptions, Layout } from 'antd';
 import 'antd/dist/antd.css';
 
 import addStar from "../utils/addStar";
 import addButton from "../utils/addButton";
 import "../data/seed";
+// import CarDetail from './CarDetail';
 
+const {info} = Modal;
 function CarList() {
     //使用Hooks管理cars和sortedInfo
     const [cars, setCars] = useState(window.Seed.cars);
@@ -30,6 +32,22 @@ function CarList() {
         setCars(nextCars);
     };
 
+    function showDetails(car) {
+        const CarDetail = car.details;
+        info(
+            {
+                title:'Car Details: ' + car.brand + ' ' + car.style,
+                content: (
+                    <Descriptions bordered>
+                        <Descriptions.Item label='fuelTankCapacity'>{CarDetail.fuelTankCapacity}</Descriptions.Item>
+                        <Descriptions.Item label='fuelConsumption'>{CarDetail.fuelConsumption}</Descriptions.Item>
+                        <Descriptions.Item label='maximumSpeed'>{CarDetail.maximumSpeed}</Descriptions.Item>
+                        <Descriptions.Item label='seetCapacity'>{CarDetail.seetCapacity}</Descriptions.Item>
+                    </Descriptions>),
+                width:1000,
+            }
+        )
+    }
 
     //antd.Table留下的接口,需要3个参数,用来更新sorter的键值和升/降序
     //an interface that requires 3 parameters to update the sorter key and ascending/descending order.
@@ -47,9 +65,10 @@ function CarList() {
             dataIndex: 'brand',
             key: 'brand',
             render: (text, index) => (
-                <Link to={'/CarDetail/' + index.id}
-                    target='_blank'>{text}
-                </Link>
+                // <Link to={'/CarDetail/' + index.id}
+                //     target='_blank'>{text}
+                // </Link>
+                <a onClick = {()=>{showDetails(index)}}>{text}</a>
             ),
             sorter: (a, b) => a.brand.length - b.brand.length,
             sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
@@ -75,6 +94,9 @@ function CarList() {
             title: 'Star',
             dataIndex: 'star',
             key: 'star',
+            render: (text, index) => (
+                <Rate disabled defaultValue={index.star} value={index.star} />
+            )
         },
         {
             title: '',
