@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 // import { Link } from 'react-router-dom';
-import { Table, Button, PageHeader, Rate, Modal, Descriptions, Layout } from 'antd';
+import { Table, Button, PageHeader, Rate, Modal, Descriptions, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
+
 
 import addStar from "../utils/addStar";
 import addButton from "../utils/addButton";
 import "../data/seed";
 // import CarDetail from './CarDetail';
 
-const {info} = Modal;
+const { info } = Modal;
 function CarList() {
     //使用Hooks管理cars和sortedInfo
     const [cars, setCars] = useState(window.Seed.cars);
@@ -36,7 +37,7 @@ function CarList() {
         const CarDetail = car.details;
         info(
             {
-                title:'Car Details: ' + car.brand + ' ' + car.style,
+                title: 'Car Details: ' + car.brand + ' ' + car.style,
                 content: (
                     <Descriptions bordered>
                         <Descriptions.Item label='fuelTankCapacity'>{CarDetail.fuelTankCapacity}</Descriptions.Item>
@@ -44,7 +45,7 @@ function CarList() {
                         <Descriptions.Item label='maximumSpeed'>{CarDetail.maximumSpeed}</Descriptions.Item>
                         <Descriptions.Item label='seetCapacity'>{CarDetail.seetCapacity}</Descriptions.Item>
                     </Descriptions>),
-                width:1000,
+                width: 1000,
             }
         )
     }
@@ -68,7 +69,7 @@ function CarList() {
                 // <Link to={'/CarDetail/' + index.id}
                 //     target='_blank'>{text}
                 // </Link>
-                <a onClick = {()=>{showDetails(index)}}>{text}</a>
+                <a onClick={() => { showDetails(index) }}>{text}</a>
             ),
             sorter: (a, b) => a.brand.length - b.brand.length,
             sortOrder: sortedInfo.columnKey === 'brand' && sortedInfo.order,
